@@ -22,6 +22,7 @@
             background-color: transparent;
             cursor: pointer;
             color: #fff;
+            @include transition(background-color);
 
             &--active {
                 background-color: $dark-blue-2;
