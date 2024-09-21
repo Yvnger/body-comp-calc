@@ -7,6 +7,22 @@ interface CellArgs {
     control: string;
 }
 
+interface Cell {
+    cell: HTMLElement;
+    value: HTMLElement;
+    isActive: (bool: boolean) => void;
+}
+
+interface SexArgs {
+    label: string;
+    slug: 'male' | 'female';
+}
+
+interface Sex {
+    sex: HTMLButtonElement;
+    isActive: (bool: boolean) => void;
+}
+
 export class Calculator {
     _sex: 'male' | 'female';
     _height: number;
@@ -14,6 +30,7 @@ export class Calculator {
     _waist: number;
     _hips: number;
     _neck: number;
+_currentSexElement: Sex | null;
 
     constructor() {
         this._sex = 'male';
@@ -47,6 +64,14 @@ this._currentSexElement = null;
 
     set sex(value: 'male' | 'female') {
         this._sex = value;
+    }
+
+    get currentSexElement() {
+        return this._currentSexElement;
+    }
+
+    set currentSexElement(element) {
+        this._currentSexElement = element;
     }
 
     get height() {
@@ -92,14 +117,7 @@ this._currentSexElement = null;
     create() {
         const calc = createEl('div', 'calculator');
 
-        const sexWrap = createEl('div', 'calculator__sex');
-
-        const sexMale = createEl('button', 'calculator__sex-btn');
-        sexMale.textContent = 'Мужчина';
-        const sexFemale = createEl('button', 'calculator__sex-btn');
-        sexFemale.textContent = 'Женщина';
-
-        sexWrap.append(sexMale, sexFemale);
+        const sexSelection = this.createSexSelection();
 
         const height = this.createCell({
             long: true,
@@ -144,6 +162,60 @@ this._currentSexElement = null;
         return calc;
     }
 
+changeSex(element: Sex, slug: 'male' | 'female') {
+        if (this._currentSexElement) {
+            this._currentSexElement.isActive(false);
+        }
+    
+        this._currentSexElement = element;
+        this._currentSexElement.isActive(true);
+        this.sex = slug;
+    
+        this.showValues();
+    }
+    
+    createSexSelection() : HTMLElement {
+        const wrap = createEl('div', 'calculator__sex');
+
+        const sexMale = this.createSexButton({
+            'label': 'Мужчина',
+            'slug': 'male'
+        });
+
+        const sexFemale = this.createSexButton({
+            'label': 'Женщина',
+            'slug': 'female'
+        });
+
+        wrap.append(sexMale.sex, sexFemale.sex);
+
+        return wrap;
+    }
+
+    createSexButton(args: SexArgs): Sex {
+        const sexActiveClass: string = 'calculator__sex-btn--active';
+    
+        const sex: HTMLButtonElement = document.createElement('button');
+        sex.classList.add('calculator__sex-btn');
+        sex.textContent = args.label;
+    
+        const sexObject = {
+            sex,
+            isActive(bool: boolean) {
+                if (bool) {
+                    sex.classList.add(sexActiveClass);
+                } else {
+                    sex.classList.remove(sexActiveClass);
+                }
+            }
+        };
+    
+        sex.addEventListener('click', () => this.changeSex(sexObject, args.slug));
+    
+        return sexObject;
+    }
+
+    createCell(args: CellArgs): Cell {
     /**
      * Создает ячейку калькулятора.
      * 
