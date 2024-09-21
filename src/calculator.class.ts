@@ -3,7 +3,7 @@ import { createEl } from "./helpers";
 interface CellArgs {
     long?: boolean;
     label: string;
-slug: string;
+    slug: string;
     defaultValue: number;
     control: string;
 }
@@ -31,7 +31,7 @@ export class Calculator {
     _waist: number;
     _hips: number;
     _neck: number;
-_currentSexElement: Sex | null;
+    _currentSexElement: Sex | null;
 
     constructor() {
         this._sex = 'male';
@@ -40,7 +40,7 @@ _currentSexElement: Sex | null;
         this._waist = 80;
         this._hips = 80;
         this._neck = 80;
-this._currentSexElement = null;
+        this._currentSexElement = null;
     }
 
     showValues() {
@@ -79,15 +79,15 @@ this._currentSexElement = null;
         return this._height;
     }
 
-    set height(value : number) {
+    set height(value: number) {
         this._height = value;
     }
-    
+
     get weight() {
         return this._weight;
     }
 
-    set weight(value : number) {
+    set weight(value: number) {
         this._weight = value;
     }
 
@@ -95,7 +95,7 @@ this._currentSexElement = null;
         return this._waist;
     }
 
-    set waist(value : number) {
+    set waist(value: number) {
         this._waist = value;
     }
 
@@ -103,7 +103,7 @@ this._currentSexElement = null;
         return this._hips;
     }
 
-    set hips(value : number) {
+    set hips(value: number) {
         this._hips = value;
     }
 
@@ -111,64 +111,69 @@ this._currentSexElement = null;
         return this._neck;
     }
 
-    set neck(value : number) {
+    set neck(value: number) {
         this._neck = value;
     }
 
     create() {
-        const calc = createEl('div', 'calculator');
+        const calc = createEl('form', 'calculator');
 
         const sexSelection = this.createSexSelection();
 
         const height = this.createCell({
             long: true,
             label: 'Рост',
-slug: 'height',
+            slug: 'height',
             defaultValue: this.height,
             control: 'range',
         });
 
-        const cellGrid : HTMLElement = createEl('div', 'calculator__cell-grid');
+        const cellGrid: HTMLElement = createEl('div', 'calculator__cell-grid');
 
-        const weight : HTMLElement = this.createCell({
+        const weight = this.createCell({
             label: 'Вес',
-slug: 'weight',
+            slug: 'weight',
             defaultValue: this.weight,
             control: 'button'
         });
 
-        const waist : HTMLElement = this.createCell({
+        const waist = this.createCell({
             label: 'Талия',
-slug: 'waist',
+            slug: 'waist',
             defaultValue: this.waist,
             control: 'button'
         })
 
-        const hips : HTMLElement = this.createCell({
+        const hips = this.createCell({
             label: 'Бёдра',
-slug: 'hips',
+            slug: 'hips',
             defaultValue: this.hips,
             control: 'button'
         })
 
-        const neck : HTMLElement = this.createCell({
+        hips.isActive(false);
+
+        const neck = this.createCell({
             label: 'Шея',
-slug: 'neck',
+            slug: 'neck',
             defaultValue: this.neck,
             control: 'button'
         })
-        
-        const submit : HTMLElement = createEl('button', 'btn');
+
+        const submit: HTMLElement = createEl('button', 'btn');
         submit.textContent = 'Посчитать показатели';
 
+        // Events
+        calc.addEventListener('submit', event => event.preventDefault());
+
         // Appends
-        calc.append(sexWrap, height, cellGrid, submit);
-        cellGrid.append(weight, waist, hips, neck);
+        calc.append(sexSelection, height.cell, cellGrid, submit);
+        cellGrid.append(weight.cell, waist.cell, hips.cell, neck.cell);
 
         return calc;
     }
 
-changeSex(element: Sex, slug: 'male' | 'female') {
+    changeSex(element: Sex, slug: 'male' | 'female') {
         if (this._currentSexElement) {
             this._currentSexElement.isActive(false);
         }
@@ -222,27 +227,25 @@ changeSex(element: Sex, slug: 'male' | 'female') {
     }
 
     createCell(args: CellArgs): Cell {
-    /**
-     * Создает ячейку калькулятора.
-     * 
-     * @param {CellArgs} args - Аргументы для ячейки.
-     * @param {boolean} [args.long] - Опциональное свойство для длинной ячейки.
-     * @param {string} args.label - Метка для ячейки.
-* @param {string} args.slug - Slug для ячейки.
-     * @param {number} args.value - Значение ячейки.
-     * @param {control} args.control - Элемент управления
-     * @returns {HTMLDivElement} Элемент ячейки.
-     */
-    createCell(args: CellArgs) {
-        // Modified
+        /**
+         * Создает ячейку калькулятора.
+         * 
+         * @param {CellArgs} args - Аргументы для ячейки.
+         * @param {boolean} [args.long] - Опциональное свойство для длинной ячейки.
+         * @param {string} args.label - Метка для ячейки.
+         * @param {string} args.slug - Slug для ячейки.
+         * @param {number} args.value - Значение ячейки.
+         * @param {control} args.control - Элемент управления
+         * @returns {HTMLDivElement} Элемент ячейки.
+         */
+
+        // Modifiers
         const longClass: string = 'calculator__cell--long';
         const inactiveClass: string = 'calculator__cell--inactive';
 
         const cell: HTMLElement = createEl('div', 'calculator__cell');
 
-        if (args.long) {
-            cell.classList.add(longClass);
-        }
+        if (args.long) cell.classList.add(longClass);
 
         const label: HTMLSpanElement = createEl('span', 'calculator__cell-label');
         label.textContent = args.label;
@@ -251,10 +254,15 @@ changeSex(element: Sex, slug: 'male' | 'female') {
         value.textContent = args.defaultValue.toString();
 
         const controlsWrap = createEl('div', 'calculator__cell-controls');
-        
-        if (args.control === 'range') {
-            const range : HTMLInputElement = this.createControlRange(this.height);
+        let increment: HTMLButtonElement | null = null;
+        let decrement: HTMLButtonElement | null = null;
 
+        if (args.control === 'range') {
+            const range: HTMLInputElement = this.createControlRange(args.defaultValue);
+            range.addEventListener('input', () => {
+                // this.updateValue(args.slug as string, range.value);
+                // value.textContent = range.value; // Обновляем значение сразу
+            });
             controlsWrap.append(range);
         } else if (args.control === 'button') {
             increment = this.createControlButton('increment', () => this.updateValue(args.slug as any, 'increment', value));
@@ -263,38 +271,52 @@ changeSex(element: Sex, slug: 'male' | 'female') {
         }
 
         cell.append(label, value, controlsWrap);
-        
-        return cell;
+
+        return {
+            cell,
+            value,
+            isActive(bool: boolean) {
+                if (!bool) {
+                    cell.classList.add(inactiveClass)
+
+                    if (increment && decrement) {
+                        increment.disabled = true;
+                        decrement.disabled = true;
+                    }
+                };
+            }
+        };
     }
 
-    increment() {
-        console.log('Прибавлено');
-    }
+    updateValue(variable: 'height' | 'weight' | 'waist' | 'hips' | 'neck', action: 'increment' | 'decrement', valueElement: HTMLSpanElement) {
+        const incrementValue = 1;
 
-    decrement() {
-        console.log('Убавлено');
-    }
-
-    createControlButton(action: 'increment' | 'decrement', callback: () => void) {
-        const button = createEl('button', 'calculator__cell-btn');
-        
         if (action === 'increment') {
-            button.textContent = '+'
+            this[variable] += incrementValue;
         } else if (action === 'decrement') {
-            button.textContent = '-';
+            this[variable] -= incrementValue;
         }
 
-        button.addEventListener('click', () => callback());
+        valueElement.textContent = this[variable].toString();
+
+        this.showValues();
+    }
+
+    createControlButton(action: 'increment' | 'decrement', callback: () => void) : HTMLButtonElement {
+        const button = document.createElement('button');
+        button.classList.add('calculator__cell-btn');
+        button.textContent = action === 'increment' ? '+' : '-';
+        button.addEventListener('click', callback);
 
         return button;
     }
 
-    createControlRange(value : number) {
-        const range : HTMLInputElement = createEl('input', 'calculator__cell-range');
+    createControlRange(value: number) {
+        const range: HTMLInputElement = createEl('input', 'calculator__cell-range');
         range.setAttribute('type', 'range');
         range.min = '135';
-        range.max = '225'; 
-        range.setAttribute('value', value.toString())    
+        range.max = '225';
+        range.value = value.toString();
 
         return range;
     }
