@@ -1,5 +1,5 @@
 import { Calculator } from './calculator.class';
-import './style.css'
+import './scss/main.scss';
 
 const rootElement = document.getElementById('app') as HTMLElement;
 
