@@ -3,6 +3,7 @@ import { createEl } from "./helpers";
 interface CellArgs {
     long?: boolean;
     label: string;
+slug: string;
     defaultValue: number;
     control: string;
 }
@@ -122,6 +123,7 @@ this._currentSexElement = null;
         const height = this.createCell({
             long: true,
             label: 'Рост',
+slug: 'height',
             defaultValue: this.height,
             control: 'range',
         });
@@ -130,24 +132,28 @@ this._currentSexElement = null;
 
         const weight : HTMLElement = this.createCell({
             label: 'Вес',
+slug: 'weight',
             defaultValue: this.weight,
             control: 'button'
         });
 
         const waist : HTMLElement = this.createCell({
             label: 'Талия',
+slug: 'waist',
             defaultValue: this.waist,
             control: 'button'
         })
 
         const hips : HTMLElement = this.createCell({
             label: 'Бёдра',
+slug: 'hips',
             defaultValue: this.hips,
             control: 'button'
         })
 
         const neck : HTMLElement = this.createCell({
             label: 'Шея',
+slug: 'neck',
             defaultValue: this.neck,
             control: 'button'
         })
@@ -222,6 +228,7 @@ changeSex(element: Sex, slug: 'male' | 'female') {
      * @param {CellArgs} args - Аргументы для ячейки.
      * @param {boolean} [args.long] - Опциональное свойство для длинной ячейки.
      * @param {string} args.label - Метка для ячейки.
+* @param {string} args.slug - Slug для ячейки.
      * @param {number} args.value - Значение ячейки.
      * @param {control} args.control - Элемент управления
      * @returns {HTMLDivElement} Элемент ячейки.
@@ -250,9 +257,8 @@ changeSex(element: Sex, slug: 'male' | 'female') {
 
             controlsWrap.append(range);
         } else if (args.control === 'button') {
-            const increment : HTMLElement = this.createControlButton('increment', this.increment);
-            const decrement : HTMLElement = this.createControlButton('decrement', this.decrement);
-
+            increment = this.createControlButton('increment', () => this.updateValue(args.slug as any, 'increment', value));
+            decrement = this.createControlButton('decrement', () => this.updateValue(args.slug as any, 'decrement', value));
             controlsWrap.append(increment, decrement);
         }
 
