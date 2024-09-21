@@ -1,0 +1,12 @@
+@import 'mixins';
+@import 'colors';
+
+* {
+    user-select: none;
+}
+
+button {
+    &:focus {
+        outline: none;
+    }
+}

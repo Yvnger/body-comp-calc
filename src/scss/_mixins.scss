@@ -1,0 +1,46 @@
+@mixin transition($properties...) {
+    $transition-duration: .3s;
+    $transition-function: ease-in-out;
+
+    @if length($properties)==1 {
+        transition: $properties $transition-duration $transition-function;
+    }
+
+    @else {
+        transition-property: $properties;
+        transition-duration: $transition-duration;
+        transition-timing-function: $transition-function;
+    }
+}
+
+@mixin resetStyles {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+}
+
+@mixin resetButton {
+	@include resetStyles;
+}
+
+/* Смартфоны, устройства с сенсорным экраном, с которым работают пальцами */
+@mixin touch {
+	@media (hover: none) and (pointer: coarse) {
+		@content
+	}
+}
+
+/* Устройства с сенсорным экраном, с которым работают стилусом */
+@mixin stylus {
+	@media (hover: none) and (pointer: fine) {
+		@content
+	}
+}
+
+/* Мышь, тачпад */
+@mixin mouse {
+	@media (hover: hover) and (pointer: fine) {
+		@content
+	}
+}
