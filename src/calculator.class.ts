@@ -198,6 +198,8 @@ export class Calculator {
             'slug': 'female'
         });
 
+        this.changeSex(sexMale, 'male');
+
         wrap.append(sexMale.sex, sexFemale.sex);
 
         return wrap;
