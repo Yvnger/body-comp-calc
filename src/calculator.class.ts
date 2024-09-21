@@ -22,6 +22,23 @@ export class Calculator {
         this._waist = 80;
         this._hips = 80;
         this._neck = 80;
+this._currentSexElement = null;
+    }
+
+    showValues() {
+        console.clear();
+        console.table([{
+            'Пол': this.sex,
+            'Текущий пол': this.currentSexElement,
+        }]);
+
+        console.table([{
+            'Рост': this.height,
+            'Вес': this.weight,
+            'Талия': this.waist,
+            'Бедра': this.hips,
+            'Шея': this.neck,
+        }]);
     }
 
     get sex() {
