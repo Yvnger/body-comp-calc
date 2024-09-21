@@ -5,4 +5,4 @@ const rootElement = document.getElementById('app') as HTMLElement;
 
 const calculator = new Calculator();
 
-// rootElement.append(calculator.create());
+rootElement.append(calculator.create());
