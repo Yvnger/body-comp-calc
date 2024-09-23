@@ -32,6 +32,9 @@ export class Calculator {
     _hips: number;
     _neck: number;
     _currentSexElement: Sex | null;
+_bodyFatPercentage: number;
+    _leanBodyMass: number;
+    _basalMetabolicRate: number;
 
     constructor() {
         this._sex = 'male';
@@ -41,6 +44,9 @@ export class Calculator {
         this._hips = 80;
         this._neck = 80;
         this._currentSexElement = null;
+this._bodyFatPercentage = 0;
+        this._leanBodyMass = 0;
+        this._basalMetabolicRate = 0;
     }
 
     showValues() {
@@ -56,6 +62,12 @@ export class Calculator {
             'Талия': this.waist,
             'Бедра': this.hips,
             'Шея': this.neck,
+        }]);
+
+        console.table([{
+            'Процент жира': this.bodyFatPercentage,
+            'Обезжиренная масса': this.leanBodyMass,
+            'Базальный обмен': this.basalMetabolicRate,
         }]);
     }
 
@@ -113,6 +125,42 @@ export class Calculator {
 
     set neck(value: number) {
         this._neck = value;
+    }
+
+    get bodyFatPercentage() {
+        return this._bodyFatPercentage;
+    }
+
+    set bodyFatPercentage(value: number) {
+        this._bodyFatPercentage = value;
+    }
+
+    get leanBodyMass() {
+        return this._leanBodyMass;
+    }
+
+    set leanBodyMass(value: number) {
+        this._leanBodyMass = value;
+    }
+
+    get basalMetabolicRate() {
+        return this._basalMetabolicRate;
+    }
+
+    set basalMetabolicRate(value: number) {
+        this._basalMetabolicRate = value;
+    }
+
+    calculateBMR() {
+        if (this.sex === 'male') {
+            this.bodyFatPercentage = Math.round(495 / (1.0324 - 0.19077 * Math.log10(this.waist - this.neck) + 0.15456 * Math.log10(this.height)) - 450);
+        } else {
+            this.bodyFatPercentage = Math.round(495 / (1.29579 - 0.35004 * Math.log10(this.waist + this.hips - this.neck) + 0.221 * Math.log10(this.height)) - 450);
+        }
+
+        this.leanBodyMass = Math.round((this.weight * (100 - this.bodyFatPercentage)) / 100);
+
+        this.basalMetabolicRate = Math.round(370 + (21.6 * this.leanBodyMass));
     }
 
     create() {
@@ -182,6 +230,7 @@ export class Calculator {
         this._currentSexElement.isActive(true);
         this.sex = slug;
     
+this.calculateBMR();
         this.showValues();
     }
     
