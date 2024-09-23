@@ -33,7 +33,7 @@ export class Calculator {
     _hips: number;
     _neck: number;
     _currentSexElement: Sex | null;
-_bodyFatPercentage: number;
+    _bodyFatPercentage: number;
     _leanBodyMass: number;
     _basalMetabolicRate: number;
 
@@ -45,7 +45,7 @@ _bodyFatPercentage: number;
         this._hips = 80;
         this._neck = 30;
         this._currentSexElement = null;
-this._bodyFatPercentage = 0;
+        this._bodyFatPercentage = 0;
         this._leanBodyMass = 0;
         this._basalMetabolicRate = 0;
     }
@@ -235,15 +235,15 @@ this._bodyFatPercentage = 0;
         if (this._currentSexElement) {
             this._currentSexElement.isActive(false);
         }
-    
+
         this._currentSexElement = element;
         this._currentSexElement.isActive(true);
         this.sex = slug;
-    
-this.calculateBMR();
+
+        this.calculateBMR();
         this.showValues();
     }
-    
+
     createSexSelection(callback: (slug: 'male' | 'female') => void): HTMLElement {
         const wrap = createEl('div', 'calculator__sex');
 
@@ -276,11 +276,11 @@ this.calculateBMR();
 
     createSexButton(args: SexArgs): Sex {
         const sexActiveClass: string = 'calculator__sex-btn--active';
-    
+
         const sex: HTMLButtonElement = document.createElement('button');
         sex.classList.add('calculator__sex-btn');
         sex.textContent = args.label;
-    
+
         const sexObject = {
             sex,
             isActive(bool: boolean) {
@@ -291,9 +291,9 @@ this.calculateBMR();
                 }
             }
         };
-    
+
         sex.addEventListener('click', () => args.onClick(args.slug));
-    
+
         return sexObject;
     }
 
@@ -348,33 +348,33 @@ this.calculateBMR();
             isActive(bool: boolean) {
                 if (!bool) {
                     cell.classList.add(inactiveClass)
-} else {
+                } else {
                     cell.classList.remove(inactiveClass);
                 };
 
-                    if (increment && decrement) {
-                        increment.disabled = !bool;
-                        decrement.disabled = !bool;
-                    }
+                if (increment && decrement) {
+                    increment.disabled = !bool;
+                    decrement.disabled = !bool;
+                }
             }
         };
     }
 
     updateValue(variable: 'height' | 'weight' | 'waist' | 'hips' | 'neck', action: 'increment' | 'decrement' | 'set', valueElement: HTMLSpanElement, value?: number) {
         const incrementValue = 1;
-const minValue = 20;
-
+        const minValue = 20;
+    
         if (action === 'increment') {
-this[variable] = Math.max(this[variable] + incrementValue, minValue);
+            this[variable] = Math.max(this[variable] + incrementValue, minValue);
         } else if (action === 'decrement') {
             this[variable] = Math.max(this[variable] - incrementValue, minValue);
         } else if (action === 'set' && value !== undefined) {
             this[variable] = Math.max(value, minValue);
         }
-
+    
         valueElement.textContent = this[variable].toString();
-
-this.calculateBMR();
+    
+        this.calculateBMR();
         this.showValues();
     }
 
@@ -382,7 +382,7 @@ this.calculateBMR();
         const button: HTMLButtonElement = document.createElement('button');
         button.classList.add('calculator__cell-btn');
         button.textContent = action === 'increment' ? '+' : '-';
-        
+
         let timerId: number | null = null;
         let intervalId: number | null = null;
 
