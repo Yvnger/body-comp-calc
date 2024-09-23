@@ -331,7 +331,7 @@ this.calculateBMR();
         if (args.control === 'range') {
             const range: HTMLInputElement = this.createControlRange(args.defaultValue);
             range.addEventListener('input', () => {
-                // this.updateValue('height', 'set', value, Number(range.value));
+                this.updateValue('height', 'set', value, Number(range.value));
             });
             controlsWrap.append(range);
         } else if (args.control === 'button') {
