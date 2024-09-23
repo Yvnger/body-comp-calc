@@ -42,7 +42,7 @@ _bodyFatPercentage: number;
         this._weight = 80;
         this._waist = 80;
         this._hips = 80;
-        this._neck = 80;
+        this._neck = 30;
         this._currentSexElement = null;
 this._bodyFatPercentage = 0;
         this._leanBodyMass = 0;
