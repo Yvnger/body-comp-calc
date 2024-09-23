@@ -356,7 +356,6 @@ this.calculateBMR();
                         increment.disabled = !bool;
                         decrement.disabled = !bool;
                     }
-                };
             }
         };
     }
@@ -366,7 +365,7 @@ this.calculateBMR();
 const minValue = 20;
 
         if (action === 'increment') {
-this[variable] = Math.max(            this[variable] + incrementValue, minValue);
+this[variable] = Math.max(this[variable] + incrementValue, minValue);
         } else if (action === 'decrement') {
             this[variable] = Math.max(this[variable] - incrementValue, minValue);
         } else if (action === 'set' && value !== undefined) {
