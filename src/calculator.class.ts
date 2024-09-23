@@ -359,13 +359,15 @@ this.calculateBMR();
         };
     }
 
-    updateValue(variable: 'height' | 'weight' | 'waist' | 'hips' | 'neck', action: 'increment' | 'decrement', valueElement: HTMLSpanElement) {
+    updateValue(variable: 'height' | 'weight' | 'waist' | 'hips' | 'neck', action: 'increment' | 'decrement' | 'set', valueElement: HTMLSpanElement, value?: number) {
         const incrementValue = 1;
 
         if (action === 'increment') {
             this[variable] += incrementValue;
         } else if (action === 'decrement') {
-            this[variable] -= incrementValue;
+            this[variable] -= incrementValue, minValue);
+        } else if (action === 'set' && value !== undefined) {
+            this[variable] = Math.max(value, minValue);
         }
 
         valueElement.textContent = this[variable].toString();
