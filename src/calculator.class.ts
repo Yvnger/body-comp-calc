@@ -374,6 +374,7 @@ this[variable] = Math.max(this[variable] + incrementValue, minValue);
 
         valueElement.textContent = this[variable].toString();
 
+this.calculateBMR();
         this.showValues();
     }
 
