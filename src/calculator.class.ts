@@ -17,6 +17,7 @@ interface Cell {
 interface SexArgs {
     label: string;
     slug: 'male' | 'female';
+    onClick: (slug: 'male' | 'female') => void;
 }
 
 interface Sex {
@@ -166,7 +167,7 @@ this._bodyFatPercentage = 0;
     create() {
         const calc = createEl('form', 'calculator');
 
-        const sexSelection = this.createSexSelection();
+        const sexSelection = this.createSexSelection(setHipsCellActive);
 
         const height = this.createCell({
             long: true,
@@ -211,6 +212,15 @@ this._bodyFatPercentage = 0;
         const submit: HTMLElement = createEl('button', 'btn');
         submit.textContent = 'Посчитать показатели';
 
+        // Callback functions
+        function setHipsCellActive(slug: 'male' | 'female') {
+            if (slug === 'male') {
+                hips.isActive(false);
+            } else if (slug === 'female') {
+                hips.isActive(true);
+            }
+        }
+
         // Events
         calc.addEventListener('submit', event => event.preventDefault());
 
@@ -234,17 +244,27 @@ this.calculateBMR();
         this.showValues();
     }
     
-    createSexSelection() : HTMLElement {
+    createSexSelection(callback: (slug: 'male' | 'female') => void): HTMLElement {
         const wrap = createEl('div', 'calculator__sex');
 
         const sexMale = this.createSexButton({
             'label': 'Мужчина',
-            'slug': 'male'
+            'slug': 'male',
+            onClick: (slug) => {
+                this.changeSex(sexMale, slug);
+
+                callback(slug);
+            },
         });
 
         const sexFemale = this.createSexButton({
             'label': 'Женщина',
-            'slug': 'female'
+            'slug': 'female',
+            onClick: (slug) => {
+                this.changeSex(sexFemale, slug);
+
+                callback(slug);
+            },
         });
 
         this.changeSex(sexMale, 'male');
@@ -272,7 +292,7 @@ this.calculateBMR();
             }
         };
     
-        sex.addEventListener('click', () => this.changeSex(sexObject, args.slug));
+        sex.addEventListener('click', () => args.onClick(args.slug));
     
         return sexObject;
     }
