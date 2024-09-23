@@ -38,6 +38,7 @@
         padding: 16px;
         background-color: $dark-blue-2;
         border-radius: $border-radius;
+@include transition(opacity);
 
         &-label {
             text-transform: uppercase;
