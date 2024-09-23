@@ -361,11 +361,12 @@ this.calculateBMR();
 
     updateValue(variable: 'height' | 'weight' | 'waist' | 'hips' | 'neck', action: 'increment' | 'decrement' | 'set', valueElement: HTMLSpanElement, value?: number) {
         const incrementValue = 1;
+const minValue = 20;
 
         if (action === 'increment') {
-            this[variable] += incrementValue;
+this[variable] = Math.max(            this[variable] + incrementValue, minValue);
         } else if (action === 'decrement') {
-            this[variable] -= incrementValue, minValue);
+            this[variable] = Math.max(this[variable] - incrementValue, minValue);
         } else if (action === 'set' && value !== undefined) {
             this[variable] = Math.max(value, minValue);
         }
