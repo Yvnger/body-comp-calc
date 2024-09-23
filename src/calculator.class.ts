@@ -380,7 +380,43 @@ this[variable] = Math.max(            this[variable] + incrementValue, minValue)
         const button = document.createElement('button');
         button.classList.add('calculator__cell-btn');
         button.textContent = action === 'increment' ? '+' : '-';
-        button.addEventListener('click', callback);
+        
+        let timerId: number | null = null;
+        let intervalId: number | null = null;
+
+        button.addEventListener('mousedown', () => {
+            callback();
+
+            timerId = window.setTimeout(() => {
+                console.log('Выполняется зажатие к хуям');
+
+                intervalId = window.setInterval(callback, 50);
+            }, 500);
+        });
+
+        button.addEventListener('mouseup', () => {
+            if (timerId) {
+                window.clearTimeout(timerId);
+                timerId = null;
+            }
+
+            if (intervalId) {
+                window.clearInterval(intervalId);
+                intervalId = null;
+            }
+        });
+
+        button.addEventListener('mouseleave', () => {
+            if (timerId) {
+                window.clearTimeout(timerId);
+                timerId = null;
+            }
+
+            if (intervalId) {
+                window.clearInterval(intervalId);
+                intervalId = null;
+            }
+        });
 
         return button;
     }
