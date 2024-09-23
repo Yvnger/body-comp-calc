@@ -349,10 +349,13 @@ this.calculateBMR();
             isActive(bool: boolean) {
                 if (!bool) {
                     cell.classList.add(inactiveClass)
+} else {
+                    cell.classList.remove(inactiveClass);
+                };
 
                     if (increment && decrement) {
-                        increment.disabled = true;
-                        decrement.disabled = true;
+                        increment.disabled = !bool;
+                        decrement.disabled = !bool;
                     }
                 };
             }
