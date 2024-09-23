@@ -191,14 +191,14 @@ this._bodyFatPercentage = 0;
             slug: 'waist',
             defaultValue: this.waist,
             control: 'button'
-        })
+        });
 
         const hips = this.createCell({
             label: 'Бёдра',
             slug: 'hips',
             defaultValue: this.hips,
             control: 'button'
-        })
+        });
 
         hips.isActive(false);
 
@@ -207,7 +207,7 @@ this._bodyFatPercentage = 0;
             slug: 'neck',
             defaultValue: this.neck,
             control: 'button'
-        })
+        });
 
         const submit: HTMLElement = createEl('button', 'btn');
         submit.textContent = 'Посчитать показатели';
