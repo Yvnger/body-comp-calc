@@ -338,7 +338,7 @@ this.calculateBMR();
         } else if (args.control === 'button') {
             increment = this.createControlButton('increment', () => this.updateValue(args.slug as any, 'increment', value));
             decrement = this.createControlButton('decrement', () => this.updateValue(args.slug as any, 'decrement', value));
-            controlsWrap.append(increment, decrement);
+            controlsWrap.append(decrement, increment);
         }
 
         cell.append(label, value, controlsWrap);
