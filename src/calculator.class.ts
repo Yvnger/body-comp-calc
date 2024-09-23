@@ -376,8 +376,8 @@ this[variable] = Math.max(            this[variable] + incrementValue, minValue)
         this.showValues();
     }
 
-    createControlButton(action: 'increment' | 'decrement', callback: () => void) : HTMLButtonElement {
-        const button = document.createElement('button');
+    createControlButton(action: 'increment' | 'decrement', callback: () => void): HTMLButtonElement {
+        const button: HTMLButtonElement = document.createElement('button');
         button.classList.add('calculator__cell-btn');
         button.textContent = action === 'increment' ? '+' : '-';
         
